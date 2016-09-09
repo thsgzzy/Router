@@ -10,19 +10,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by admin on 16/9/8.
+ * A container to manage some global config.
+ * Created by lzh on 16/9/8.
  */
 public enum RouteManager {
     INSTANCE;
-    RouteCallback callback;
-    boolean shouldReload;
+    /**
+     * global route callback
+     */
+    RouteCallback GlobalCallback;
+    boolean shouldReload;// if should be reload routeMap.
+    /**
+     * A container to contains all of route rule creator,compat with some complex scene;
+     */
     List<RouteCreator> creatorList = new ArrayList<>();
+    /**
+     * A map to contains all of route rule created by creatorList
+     */
     Map<String,RouteMap> routeMap = new HashMap<>();
     public void setCallback (RouteCallback callback) {
         if (callback == null) {
             throw new IllegalArgumentException("callback should not be null");
         }
-        this.callback = callback;
+        this.GlobalCallback = callback;
     }
 
     public void addCreator (RouteCreator creator) {
@@ -34,7 +44,7 @@ public enum RouteManager {
     }
 
     public RouteCallback getCallback() {
-        return callback;
+        return GlobalCallback;
     }
 
     public Map<String,RouteMap> getRouteMap() {
@@ -42,7 +52,7 @@ public enum RouteManager {
             routeMap.clear();
             int count = creatorList == null ? 0 : creatorList.size();
             for (int i = 0; i < count; i++) {
-                routeMap.putAll(creatorList.get(i).initRoute());
+                routeMap.putAll(creatorList.get(i).createRouteRules());
             }
             shouldReload = false;
         }

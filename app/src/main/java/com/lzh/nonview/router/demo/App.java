@@ -49,6 +49,7 @@ public class App extends Application {
 
             @Override
             public void onOpenSuccess(Uri uri, String clzName) {
+                // 可在此进行route追踪
                 Toast.makeText(App.this, String.format("Launch activity %s success",clzName), Toast.LENGTH_SHORT).show();
             }
 
@@ -62,10 +63,10 @@ public class App extends Application {
     class RouteInit implements RouteCreator {
 
         @Override
-        public Map<String, RouteMap> initRoute() {
+        public Map<String, RouteMap> createRouteRules() {
             Map<String,RouteMap> routes = new HashMap<>();
             routes.put("jumei://main",
-                    new RouteMap(ParamsActivity.class.getCanonicalName())
+                    new RouteMap(ParamsActivity.class)
                     .addParam("price",RouteMap.FLOAT)
                     .addParam("bookName",RouteMap.STRING)
             );
